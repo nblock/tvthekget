@@ -1,4 +1,8 @@
 tvthekget - grab videos from tvthek.orf.at
 
+Dependencies:
+-curl
+-mmsrip
+
 Example:
-$ tvthekget.sh <tvthekurl>
+$ tvthekget.sh http://tvthek.orf.at/fill_me
