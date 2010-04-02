@@ -1,1 +1,4 @@
 tvthekget - grab videos from tvthek.orf.at
+
+Example:
+$ tvthekget.sh <tvthekurl>
