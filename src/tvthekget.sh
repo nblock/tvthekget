@@ -3,11 +3,11 @@
 # author: nblock <nblock [at] archlinux [dot] us>
 # license: GPLv3
 # TODO:
-#  -name files according to the name of the report instead of using a counter
 #  -some more testing
 
 TMP="/tmp/tvthekgetlinks"
 TVTHEKBASE="http://tvthek.orf.at"
+SEP="_"
 CURL="/usr/bin/curl -s"
 MMSRIP="/usr/bin/mmsrip"
 
@@ -16,16 +16,22 @@ function get_files {
     URL=${TVTHEKBASE}`$CURL $1 |sed -n 's/.*src="\([^"].*asx\)"/\1/p'`
     $CURL $URL| grep -o 'mms:[^?"]*' > $TMP
 
-    let CTR=1
-    for link in $(cat $TMP)
-    do
-        FILE="$CTR.wmv"
-        if [ -e $FILE ]
-        then
+    let CTR=1   #only used to preserve the order of multiple streams
+    for link in $(cat $TMP); do
+        DATE=`echo $link |cut -d '_' -f 1 |cut -d '/' -f 5`
+        TIME=`echo $link |cut -d '_' -f 2`
+        TITLE=`echo $link |cut -d '_' -f 5`
+        TITLE2=`echo $link |cut -d '_' -f 6`
+
+        if [ "x$TITLE2" != "x" ]; then
+            FILE="$TITLE$SEP$DATE$SEP$TIME$SEP$CTR$SEP$TITLE2.wmv"
+        else
+            FILE="$TITLE$SEP$DATE$SEP$TIME.wmv"
+        fi
+        if [ -e $FILE ]; then
             echo "$FILE already exists. Aborting."
             exit -1
         fi
-        #echo "downloading: $FILE from $link" 
         $MMSRIP -o $FILE $link
         let CTR++
     done
@@ -34,8 +40,7 @@ function get_files {
 }
 
 #handle multiple parameters
-while [ -n "$1" ]
-do
+while [ -n "$1" ]; do
     get_files $1
     shift
 done
