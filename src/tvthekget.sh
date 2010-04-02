@@ -7,7 +7,7 @@
 #  -name files according to the name of the report instead of using a counter
 #  -some more testing
 
-TMP=/tmp/tvthekgetlinks
+TMP="/tmp/tvthekgetlinks"
 TVTHEKBASE="http://tvthek.orf.at"
 CURL="/usr/bin/curl -s"
 MMSRIP="/usr/bin/mmsrip"
@@ -18,8 +18,14 @@ $CURL $URL| grep -o 'mms:[^?"]*' > $TMP
 let CTR=1
 for link in $(cat $TMP)
 do
-    #echo "downloading:" $CTR".wmv from" $link 
-    $MMSRIP -o $CTR.wmv $link
+    FILE="$CTR.wmv"
+    if [ -e $FILE ]
+    then
+          echo "$FILE already exists. Aborting."
+          exit -1
+    fi
+    #echo "downloading: $FILE from $link" 
+    $MMSRIP -o $FILE $link
     let CTR++
 done
 
