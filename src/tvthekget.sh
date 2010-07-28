@@ -4,6 +4,7 @@
 # license: GPLv3
 # TODO:
 #  -some more testing
+#  -link selection
 
 TMP="/tmp/tvthekgetlinks"
 TVTHEKBASE="http://tvthek.orf.at"
@@ -41,7 +42,11 @@ function get_files {
 
 #handle multiple parameters
 while [ -n "$1" ]; do
-    get_files $1
+    if [[ `echo $1 | egrep "^$TVTHEKBASE" |wc -l` -eq 1 ]]; then
+        get_files $1
+    else
+        echo "$1 is an invalid argument. Skipping"
+    fi
     shift
 done
 
