@@ -4,7 +4,6 @@
 # license: GPLv3
 # TODO:
 #  -some more testing
-#  -link selection
 
 TVTHEKBASE="http://tvthek.orf.at"
 SEP="_"
@@ -15,6 +14,11 @@ MMSRIP="/usr/bin/mmsrip"
 function get_files {
     URL=${TVTHEKBASE}`$CURL $1 |sed -n 's/.*src="\([^"].*asx\)"/\1/p'`
     $CURL $URL| grep -o 'mms:[^?"]*' | uniq > $TMP
+
+    #if we have multiple entries: fire up $EDITOR to select ...
+    if [[ `cat $TMP | wc -l` -ne 1 ]]; then
+        env $EDITOR $TMP
+    fi
 
     let CTR=1   #only used to preserve the order of multiple streams
     for link in $(cat $TMP); do
