@@ -6,7 +6,6 @@
 #  -some more testing
 #  -link selection
 
-TMP="/tmp/tvthekgetlinks"
 TVTHEKBASE="http://tvthek.orf.at"
 SEP="_"
 CURL="/usr/bin/curl -s"
@@ -43,6 +42,7 @@ function get_files {
 #handle multiple parameters
 while [ -n "$1" ]; do
     if [[ `echo $1 | egrep "^$TVTHEKBASE" |wc -l` -eq 1 ]]; then
+        TMP=`mktemp /tmp/tvthekget.XXXXXX` || exit 1
         get_files $1
     else
         echo "$1 is an invalid argument. Skipping"
