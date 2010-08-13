@@ -14,7 +14,7 @@ MMSRIP="/usr/bin/mmsrip"
 #do the actual work
 function get_files {
     URL=${TVTHEKBASE}`$CURL $1 |sed -n 's/.*src="\([^"].*asx\)"/\1/p'`
-    $CURL $URL| grep -o 'mms:[^?"]*' > $TMP
+    $CURL $URL| grep -o 'mms:[^?"]*' | uniq > $TMP
 
     let CTR=1   #only used to preserve the order of multiple streams
     for link in $(cat $TMP); do
