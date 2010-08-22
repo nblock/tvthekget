@@ -36,6 +36,7 @@ function get_files {
             echo "$FILE already exists. Aborting."
             exit -1
         fi
+        FILE="$(tr [A-Z] [a-z] <<< "$FILE")"
         $MMSRIP -o $FILE $link
         let CTR++
     done
