@@ -2,8 +2,6 @@
 # tvthekget.sh - grab videos from tvthek.orf.at
 # author: nblock <nblock [at] archlinux [dot] us>
 # license: GPLv3
-# TODO:
-#  -some more testing
 
 TVTHEKBASE="http://tvthek.orf.at"
 SEP="_"
