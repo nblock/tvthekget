@@ -43,14 +43,20 @@ function get_files {
 }
 
 #handle multiple parameters
+function process_params {
 while [ -n "$1" ]; do
-    if [[ `echo $1 | egrep "^$TVTHEKBASE" |wc -l` -eq 1 ]]; then
-        TMP=`mktemp /tmp/tvthekget.XXXXXX` || exit 1
-        get_files $1
-    else
-        echo "$1 is an invalid argument. Skipping"
-    fi
-    shift
-done
+        if [[ `echo $1 | egrep "^$TVTHEKBASE" |wc -l` -eq 1 ]]; then
+            TMP=`mktemp /tmp/tvthekget.XXXXXX` || exit 1
+            get_files $1
+        else
+            echo "$1 is an invalid argument. Skipping"
+        fi
+        shift
+    done
+}
+
+#entry
+[ $# -eq 0 ] && { echo "Usage: $0 [TVTHEK-URLs]" ; exit 1; }
+process_params "$@"
 
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4
